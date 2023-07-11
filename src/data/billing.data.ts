@@ -1,11 +1,11 @@
-import { Client } from '../types/Clients.types';
-import {ClientSchema} from '../schemas/clients.schema';
+import { Billing } from '../types/billing.types';
+import {BillingSchema} from '../schemas/billing.schema';
 
 
-const readClients = (): Promise < Client[] > => {
+const readBillings = (): Promise < Billing[] > => {
     return new Promise ( async (resolve,reject) => {
         try {
-            const mongoResponse = await ClientSchema.find();
+            const mongoResponse = await BillingSchema.find();
             resolve(mongoResponse);
         } catch (error) {
             reject(error);
@@ -13,10 +13,10 @@ const readClients = (): Promise < Client[] > => {
     });
 };
 
-const readClientsByName= (name: string) => {
+const readBillingsByInvoiceNumber = (invoiceNumber: string) => {
     return new Promise (async (resolve, reject) => {
         try {
-            const mongoResponse = await ClientSchema.findOne({name: name});
+            const mongoResponse = await BillingSchema.findOne({invoiceNumber: invoiceNumber});
 
             if (mongoResponse === null){
                 reject (404);
@@ -29,22 +29,22 @@ const readClientsByName= (name: string) => {
     });
 ;}
 
-const createClient = (body: Client) => {
+const createBilling = (body: Billing) => {
     return new Promise (async (resolve, reject) => {
         try {
-            const client = new ClientSchema(body);
-            await client.save();
-            resolve ('A new client has been added');
+            const billing = new BillingSchema(body);
+            await billing.save();
+            resolve ('A new bill has been added');
         } catch (error) {
             reject (error);
         }
     });
 };
 
-const updateClient = (id: string, body: Client) => {
+const updateBilling = (id: string, body: Billing) => {
     return new Promise (async (resolve,reject) => {
         try {
-            const updateEntity = await ClientSchema.findByIdAndUpdate(id,body, {new:true});
+            const updateEntity = await BillingSchema.findByIdAndUpdate(id,body, {new:true});
 
             if (updateEntity === null){
                 reject(404);
@@ -57,10 +57,10 @@ const updateClient = (id: string, body: Client) => {
     });
 };
 
-const deleteClientById = (id: string) =>{
+const deleteBillingById = (id: string) =>{
     return new Promise (async (resolve, reject) => {
         try {
-            const deletedEntity = await ClientSchema.findByIdAndRemove(id);
+            const deletedEntity = await BillingSchema.findByIdAndRemove(id);
 
             if (deletedEntity === null) {
                 reject (404);
@@ -74,9 +74,9 @@ const deleteClientById = (id: string) =>{
 };
 
 export {
-    readClients,
-    readClientsByName,
-    createClient,
-    updateClient,
-    deleteClientById
+    readBillings,
+    readBillingsByInvoiceNumber,
+    createBilling,
+    updateBilling,
+    deleteBillingById
 };

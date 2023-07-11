@@ -1,4 +1,5 @@
 interface Client {
+    id: string;
     name: string;
     cc: string;
     email: string;

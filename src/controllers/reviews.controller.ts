@@ -2,7 +2,7 @@ import express from 'express';
 
 import{
     getReviews,
-    getReviewsbyId,
+    getReviewsbyName,
     postReview,
     putReview,
     deleteReview
@@ -27,12 +27,12 @@ router.get('',async (req,res) => {
     }
 });
 
-router.get('/id/:id',async (req,res) => {
+router.get('/customerId/:customerId',async (req,res) => {
     try {
-        const id = req.params.id;
-        const serviceLayerResponse = await getReviewsbyId(id);
+        const customerId = req.params.customerId;
+        const serviceLayerResponse = await getReviewsbyName(customerId);
 
-        res.status(serviceLayerResponse.code).json(serviceLayerResponse.message);
+        res.status(serviceLayerResponse.code).json(serviceLayerResponse.result);
     } catch (error) {
         const customError = error as CustomErrorFormat;
         console.log(customError.errorMessage);

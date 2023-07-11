@@ -2,7 +2,7 @@ import express from 'express';
 
 import{
     getClients,
-    getClientsbyId,
+    getClientsbyName,
     postClient,
     putClient,
     deleteClient
@@ -27,12 +27,12 @@ router.get('',async (req,res) => {
     }
 });
 
-router.get('/id/:id',async (req,res) => {
+router.get('/name/:name',async (req,res) => {
     try {
-        const id = req.params.id;
-        const serviceLayerResponse = await getClientsbyId(id);
+        const name = req.params.name;
+        const serviceLayerResponse = await getClientsbyName(name);
 
-        res.status(serviceLayerResponse.code).json(serviceLayerResponse.message);
+        res.status(serviceLayerResponse.code).json(serviceLayerResponse.result);
     } catch (error) {
         const customError = error as CustomErrorFormat;
         console.log(customError.errorMessage);
@@ -40,7 +40,7 @@ router.get('/id/:id',async (req,res) => {
     }
 });
 
-router.post('/newReview', async (req,res) => {
+router.post('/newClient', async (req,res) => {
     try {
         const body = req.body;
         const serviceLayerResponse = await postClient(body);

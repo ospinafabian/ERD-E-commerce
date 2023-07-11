@@ -13,10 +13,10 @@ const readReviews = (): Promise < Review[] > => {
     });
 };
 
-const readReviewsById = (id: string) => {
+const readReviewsByName = (customerId: string) => {
     return new Promise (async (resolve, reject) => {
         try {
-            const mongoResponse = await ReviewSchema.findById(id);
+            const mongoResponse = await ReviewSchema.findOne({customerId: customerId});
 
             if (mongoResponse === null){
                 reject (404);
@@ -60,9 +60,9 @@ const updateReview = (id: string, body: Review) => {
 const deleteReviewById = (id: string) =>{
     return new Promise (async (resolve, reject) => {
         try {
-            const deleteEnttity = await ReviewSchema.findByIdAndRemove(id);
+            const deletedEntity = await ReviewSchema.findByIdAndRemove(id);
 
-            if (deleteEnttity === null) {
+            if (deletedEntity === null) {
                 reject (404);
             } else {
                 resolve (200);
@@ -75,7 +75,7 @@ const deleteReviewById = (id: string) =>{
 
 export {
     readReviews,
-    readReviewsById,
+    readReviewsByName,
     createReview,
     updateReview,
     deleteReviewById

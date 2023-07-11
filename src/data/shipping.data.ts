@@ -1,11 +1,11 @@
-import { Client } from '../types/Clients.types';
-import {ClientSchema} from '../schemas/clients.schema';
+import { Shipping } from '../types/shipping.types';
+import {ShippingSchema} from '../schemas/shipping.schema';
 
 
-const readClients = (): Promise < Client[] > => {
+const readShipping = (): Promise < Shipping[] > => {
     return new Promise ( async (resolve,reject) => {
         try {
-            const mongoResponse = await ClientSchema.find();
+            const mongoResponse = await ShippingSchema.find();
             resolve(mongoResponse);
         } catch (error) {
             reject(error);
@@ -13,10 +13,10 @@ const readClients = (): Promise < Client[] > => {
     });
 };
 
-const readClientsByName= (name: string) => {
+const readShippingByPackingSlip = (packingSlip: string) => {
     return new Promise (async (resolve, reject) => {
         try {
-            const mongoResponse = await ClientSchema.findOne({name: name});
+            const mongoResponse = await ShippingSchema.findOne({packingSlip: packingSlip});
 
             if (mongoResponse === null){
                 reject (404);
@@ -29,22 +29,22 @@ const readClientsByName= (name: string) => {
     });
 ;}
 
-const createClient = (body: Client) => {
+const createShipping = (body: Shipping) => {
     return new Promise (async (resolve, reject) => {
         try {
-            const client = new ClientSchema(body);
-            await client.save();
-            resolve ('A new client has been added');
+            const shipping = new ShippingSchema(body);
+            await shipping.save();
+            resolve ('A new ship has been added');
         } catch (error) {
             reject (error);
         }
     });
 };
 
-const updateClient = (id: string, body: Client) => {
+const updateShipping = (id: string, body: Shipping) => {
     return new Promise (async (resolve,reject) => {
         try {
-            const updateEntity = await ClientSchema.findByIdAndUpdate(id,body, {new:true});
+            const updateEntity = await ShippingSchema.findByIdAndUpdate(id,body, {new:true});
 
             if (updateEntity === null){
                 reject(404);
@@ -57,10 +57,10 @@ const updateClient = (id: string, body: Client) => {
     });
 };
 
-const deleteClientById = (id: string) =>{
+const deleteShippingById = (id: string) =>{
     return new Promise (async (resolve, reject) => {
         try {
-            const deletedEntity = await ClientSchema.findByIdAndRemove(id);
+            const deletedEntity = await ShippingSchema.findByIdAndRemove(id);
 
             if (deletedEntity === null) {
                 reject (404);
@@ -74,9 +74,9 @@ const deleteClientById = (id: string) =>{
 };
 
 export {
-    readClients,
-    readClientsByName,
-    createClient,
-    updateClient,
-    deleteClientById
+    readShipping,
+    readShippingByPackingSlip,
+    createShipping,
+    updateShipping,
+    deleteShippingById
 };

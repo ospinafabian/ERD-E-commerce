@@ -1,7 +1,7 @@
 
 import { Product } from "../types/products.types";
 import {readProducts,
-        readProductsById,
+        readProductsByName,
         createProduct,
         updateProduct,
         deleteProductById
@@ -12,13 +12,6 @@ interface ServiceLayerResponse {
     result?: Product | Product[],
     message?: string,
     errorMessage?: unknown,
-}
-
-interface ServiceLayerResponse {
-    code: number,
-    result?: Product | Product[],
-    message?: string,
-    error?: unknown,
 }
 
 
@@ -35,9 +28,9 @@ const getProducts = ():Promise <ServiceLayerResponse> => {
     });
 };
 
-const getProductsbyId = (id:string): Promise<ServiceLayerResponse> => {
+const getProductsbyName = (name:string): Promise<ServiceLayerResponse> => {
     return new Promise ((resolve, reject) => {
-        readProductsById(id)
+        readProductsByName(name)
         .then((dataLayerResponse) => {
 
             if ((dataLayerResponse as Product []).length === 0){
@@ -64,9 +57,9 @@ const postProduct = (body: Product): Promise<ServiceLayerResponse> => {
     });
 };
 
-const putProduct = (sku: string, body: Product): Promise<ServiceLayerResponse> => {
+const putProduct = (id: string, body: Product): Promise<ServiceLayerResponse> => {
     return new Promise ((resolve, reject) => {
-        updateProduct(sku, body)
+        updateProduct(id, body)
         .then((dataLayerResponse) => {
             if (dataLayerResponse === 200){
                 resolve ({code: 200, message: 'Product successfully updated' as string})
@@ -82,9 +75,9 @@ const putProduct = (sku: string, body: Product): Promise<ServiceLayerResponse> =
     });
 };
 
-const deleteProduct = (sku: string): Promise<ServiceLayerResponse> => {
+const deleteProduct = (id: string): Promise<ServiceLayerResponse> => {
     return new Promise ((resolve, reject) => {
-        deleteProductById(sku)
+        deleteProductById(id)
         .then ((dataLayerResponse) => {
             if (dataLayerResponse === 200) {
                 resolve ({code: 200, message: "Product deleted"});
@@ -103,7 +96,7 @@ const deleteProduct = (sku: string): Promise<ServiceLayerResponse> => {
 
 export {
     getProducts,
-    getProductsbyId,
+    getProductsbyName,
     postProduct,
     putProduct,
     deleteProduct

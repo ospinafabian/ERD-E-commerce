@@ -1,12 +1,12 @@
 import express from 'express';
 
 import{
-    getProducts,
-    getProductsbyName,
-    postProduct,
-    putProduct,
-    deleteProduct
-} from '../services/products.services';
+    getBillings,
+    getBillingByInvoiceNumber,
+    postBilling,
+    putBilling,
+    deleteBilling
+} from '../services/billing.services';
 
 const router = express.Router();
 
@@ -18,7 +18,7 @@ interface CustomErrorFormat {
 
 router.get('',async (req,res) => {
     try{
-        const serviceLayerResponse = await getProducts();
+        const serviceLayerResponse = await getBillings();
         res.status(serviceLayerResponse.code).json({result: serviceLayerResponse.result});
     } catch(error){
         const customError = error as CustomErrorFormat;
@@ -27,10 +27,10 @@ router.get('',async (req,res) => {
     }
 });
 
-router.get('/name/:name',async (req,res) => {
+router.get('/invoiceNumber/:invoiceNumber',async (req,res) => {
     try {
-        const name = req.params.name;
-        const serviceLayerResponse = await getProductsbyName(name);
+        const invoiceNumber = req.params.invoiceNumber;
+        const serviceLayerResponse = await getBillingByInvoiceNumber(invoiceNumber);
 
         res.status(serviceLayerResponse.code).json(serviceLayerResponse.result);
     } catch (error) {
@@ -40,10 +40,10 @@ router.get('/name/:name',async (req,res) => {
     }
 });
 
-router.post('/newProduct', async (req,res) => {
+router.post('/newBilling', async (req,res) => {
     try {
         const body = req.body;
-        const serviceLayerResponse = await postProduct(body);
+        const serviceLayerResponse = await postBilling(body);
 
         res.status(serviceLayerResponse.code).json(serviceLayerResponse.message);
     } catch (error) {
@@ -57,7 +57,7 @@ router.put('/id/:id', async function (req,res) {
     try {
         const id = req.params.id;
         const body = req.body;
-        const serviceLayerResponse = await putProduct(id, body);
+        const serviceLayerResponse = await putBilling(id,body);
 
         res.status(serviceLayerResponse.code).json(serviceLayerResponse.message);
     } catch (error) {
@@ -70,7 +70,7 @@ router.put('/id/:id', async function (req,res) {
 router.delete('/id/:id', async function (req,res) {
     try {
         const id = req.params.id;
-        const serviceLayerResponse = await deleteProduct(id);
+        const serviceLayerResponse = await deleteBilling(id);
         res.status(serviceLayerResponse.code).json(serviceLayerResponse.message);
     } catch (error) {
         const customError = error as CustomErrorFormat;

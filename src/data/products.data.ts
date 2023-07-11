@@ -13,15 +13,15 @@ const readProducts = (): Promise < Product[] > => {
     });
 };
 
-const readProductsById = (id: string) => {
+const readProductsByName = (name: string) => {
     return new Promise (async (resolve, reject) => {
         try {
-            const mongoResponse = await ProductSchema.findById(id);
+            const mongoResult = await ProductSchema.findOne({ name: name});
 
-            if (mongoResponse === null){
+            if (mongoResult === null){
                 reject (404);
             }else {
-                resolve (mongoResponse);
+                resolve (mongoResult);
             }
         } catch (error){
             reject (error);
@@ -41,10 +41,10 @@ const createProduct = (body: Product) => {
     });
 };
 
-const updateProduct = (sku: string, body: Product) => {
+const updateProduct = (id: string, body: Product) => {
     return new Promise (async (resolve,reject) => {
         try {
-            const updateEntity = await ProductSchema.findByIdAndUpdate(sku,body, {new:true});
+            const updateEntity = await ProductSchema.findByIdAndUpdate(id,body, {new:true});
 
             if (updateEntity === null){
                 reject(404);
@@ -57,12 +57,12 @@ const updateProduct = (sku: string, body: Product) => {
     });
 };
 
-const deleteProductById = (sku: string) =>{
+const deleteProductById = (id: string) =>{
     return new Promise (async (resolve, reject) => {
         try {
-            const deleteEnttity = await ProductSchema.findByIdAndRemove(sku);
+            const deletedEntity = await ProductSchema.findByIdAndRemove(id);
 
-            if (deleteEnttity === null) {
+            if (deletedEntity === null) {
                 reject (404);
             } else {
                 resolve (200);
@@ -75,7 +75,7 @@ const deleteProductById = (sku: string) =>{
 
 export {
     readProducts,
-    readProductsById,
+    readProductsByName,
     createProduct,
     updateProduct,
     deleteProductById

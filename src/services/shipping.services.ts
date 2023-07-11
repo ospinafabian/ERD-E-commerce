@@ -1,27 +1,26 @@
 
-import { Client } from "../types/Clients.types";
-import {readClients,
-        readClientsByName,
-        createClient,
-        updateClient,
-        deleteClientById
-} from '../data/clients.data';
+import { Shipping } from "../types/shipping.types";
+import {readShipping,
+    readShippingByPackingSlip,
+    createShipping,
+    updateShipping,
+    deleteShippingById
+} from '../data/shipping.data';
 
 interface ServiceLayerResponse {
     code: number,
-    result?: Client | Client[],
+    result?: Shipping | Shipping[],
     message?: string,
     errorMessage?: unknown,
 }
 
 
-
-const getClients = ():Promise <ServiceLayerResponse> => {
+const getShippings = ():Promise <ServiceLayerResponse> => {
     return new Promise ((resolve, reject) => {
-        readClients()
-            .then((dataLayerResponse: Client[]) => {
-                const localClientsDB = dataLayerResponse;
-                resolve({code: 200, result: localClientsDB});
+        readShipping()
+            .then((dataLayerResponse: Shipping[]) => {
+                const localShippingsDB = dataLayerResponse;
+                resolve({code: 200, result: localShippingsDB});
             })
             .catch((error) => {
             reject({code:500, message: "error inesperado", errorMessage: error});
@@ -29,15 +28,15 @@ const getClients = ():Promise <ServiceLayerResponse> => {
     });
 };
 
-const getClientsbyName = (name:string): Promise<ServiceLayerResponse> => {
+const getShippingByPackingSlip = (packingSlip:string): Promise<ServiceLayerResponse> => {
     return new Promise ((resolve, reject) => {
-        readClientsByName(name)
+        readShippingByPackingSlip(packingSlip)
         .then((dataLayerResponse) => {
 
-            if ((dataLayerResponse as Client []).length === 0){
-                resolve({code: 404, message: 'Client not found'});
+            if ((dataLayerResponse as Shipping []).length === 0){
+                resolve({code: 404, message: 'Ship not found'});
             }else {
-                resolve ({code:200, result: dataLayerResponse as Client });
+                resolve ({code:200, result: dataLayerResponse as Shipping });
             }
         })
         .catch (error => {
@@ -46,9 +45,9 @@ const getClientsbyName = (name:string): Promise<ServiceLayerResponse> => {
     });
 };
 
-const postClient = (body: Client): Promise<ServiceLayerResponse> => {
+const postShipping = (body: Shipping): Promise<ServiceLayerResponse> => {
     return new Promise ((resolve, reject) => {
-        createClient(body)
+        createShipping(body)
         .then((dataLayerResponse) => {
             resolve({code: 201, message: dataLayerResponse as string });
         })
@@ -58,17 +57,17 @@ const postClient = (body: Client): Promise<ServiceLayerResponse> => {
     });
 };
 
-const putClient = (id: string, body: Client): Promise<ServiceLayerResponse> => {
+const putShipping = (id: string, body: Shipping): Promise<ServiceLayerResponse> => {
     return new Promise ((resolve, reject) => {
-        updateClient(id, body)
+        updateShipping(id, body)
         .then((dataLayerResponse) => {
             if (dataLayerResponse === 200){
-                resolve ({code: 200, message: 'Client successfully updated' as string})
+                resolve ({code: 200, message: 'Ship successfully updated' as string})
             }
         })
         .catch ( error => {
             if (error === 404){
-                reject ({ code: 404, message: 'product not found'});
+                reject ({ code: 404, message: 'Ship not found'});
             } else {
                 reject ({code: 500, message: 'Unexpected error', errorMessage: error});
             }
@@ -76,17 +75,17 @@ const putClient = (id: string, body: Client): Promise<ServiceLayerResponse> => {
     });
 };
 
-const deleteClient = (id: string): Promise<ServiceLayerResponse> => {
+const deleteShipping = (id: string): Promise<ServiceLayerResponse> => {
     return new Promise ((resolve, reject) => {
-        deleteClientById(id)
+        deleteShippingById(id)
         .then ((dataLayerResponse) => {
             if (dataLayerResponse === 200) {
-                resolve ({code: 200, message: "Client deleted"});
+                resolve ({code: 200, message: "Ship deleted"});
             }
         })
         .catch ((error) => {
             if (error === 404) {
-                reject({code: 404, message: "Client doesn't exist"});
+                reject({code: 404, message: "Ship doesn't exist"});
             } else {
                 reject ({code: 500, message: "Unexpected error", errorMessage: error});
             }
@@ -96,9 +95,9 @@ const deleteClient = (id: string): Promise<ServiceLayerResponse> => {
 
 
 export {
-    getClients,
-    getClientsbyName,
-    postClient,
-    putClient,
-    deleteClient
+    getShippings,
+    getShippingByPackingSlip,
+    postShipping,
+    putShipping,
+    deleteShipping
 };
